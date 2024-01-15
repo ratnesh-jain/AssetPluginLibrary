@@ -48,6 +48,12 @@ public enum Executor {
             self.bundle = bundle
         }
     }
+    
+    extension ImageResource {
+        public init(asset: ImageAssetResource) {
+            self.init(name: asset.name, bundle: asset.bundle)
+        }
+    }
 
     public struct ColorAssetResource: Hashable {
         public var name: String
@@ -56,6 +62,12 @@ public enum Executor {
         public init(name: String, bundle: Bundle) {
             self.name = name
             self.bundle = bundle
+        }
+    }
+    
+    extension ColorResource {
+        public init(asset: ColorAssetResource) {
+            self.init(name: asset.name, bundle: asset.bundle)
         }
     }
     
