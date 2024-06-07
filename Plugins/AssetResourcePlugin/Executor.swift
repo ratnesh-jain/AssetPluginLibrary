@@ -39,6 +39,10 @@ public enum Executor {
     private let resourceBundle = Foundation.Bundle(for: ResourceBundleClass.self)
     #endif
     
+    """
+    
+    static var imageAssetGeneratedCode: String = """
+    // MARK: - Image Assets
     public struct ImageAssetResource: Hashable {
         public var name: String
         public var bundle: Bundle
@@ -54,7 +58,29 @@ public enum Executor {
             self.init(name: asset.name, bundle: asset.bundle)
         }
     }
+    
+    @available(iOS 13.0, *)
+    extension UIImage {
+        public convenience init(asset: ImageAssetResource) {
+            self.init(named: asset.name, in: asset.bundle, with: nil)!
+        }
+    }
+    
+    #if canImport(SwiftUI)
+    import SwiftUI
 
+    @available(iOS 13.0, *)
+    extension Image {
+        public init(asset: ImageAssetResource) {
+            self.init(asset.name, bundle: asset.bundle)
+        }
+    }
+    #endif
+    
+    """
+    
+    static var colorAssetGeneratedCode: String = """
+    // MARK: - Color Assets
     public struct ColorAssetResource: Hashable {
         public var name: String
         public var bundle: Bundle
@@ -72,13 +98,6 @@ public enum Executor {
     }
     
     @available(iOS 13.0, *)
-    extension UIImage {
-        public convenience init(asset: ImageAssetResource) {
-            self.init(named: asset.name, in: asset.bundle, with: nil)!
-        }
-    }
-
-    @available(iOS 13.0, *)
     extension UIColor {
         public convenience init(asset: ColorAssetResource) {
             self.init(named: asset.name, in: asset.bundle, compatibleWith: nil)!
@@ -89,13 +108,6 @@ public enum Executor {
     import SwiftUI
 
     @available(iOS 13.0, *)
-    extension Image {
-        public init(asset: ImageAssetResource) {
-            self.init(asset.name, bundle: asset.bundle)
-        }
-    }
-
-    @available(iOS 13.0, *)
     extension Color {
         public init(asset: ColorAssetResource) {
             self.init(asset.name, bundle: asset.bundle)
@@ -103,8 +115,6 @@ public enum Executor {
     }
 
     #endif
-    
-    
     """
     
     public static func run(input: String, output: String) throws {
@@ -123,6 +133,7 @@ public enum Executor {
         }
         
         if !images.isEmpty {
+            generateCode.append(imageAssetGeneratedCode)
             generateCode.append("public extension ImageAssetResource {\n")
             
             for image in images {
@@ -134,6 +145,7 @@ public enum Executor {
         }
         
         if !colors.isEmpty {
+            generateCode.append(colorAssetGeneratedCode)
             generateCode.append("public extension ColorAssetResource {\n")
             
             for color in colors {
