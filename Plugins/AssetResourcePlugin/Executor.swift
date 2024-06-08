@@ -16,6 +16,14 @@ public enum Executor {
         var filename: String?
     }
     
+    struct Symbols: Decodable {
+        var symbols: [Symbol]
+    }
+    
+    struct Symbol: Decodable {
+        var filename: String?
+    }
+    
     // static let appBlue = Color("AppBlue", bundle: .module)
     // Color(uiColor: UIColor(named: "", in: .module)!)
     static var colors = [String]()
@@ -77,6 +85,7 @@ public enum Executor {
     }
     #endif
     
+    
     """
     
     static var colorAssetGeneratedCode: String = """
@@ -115,6 +124,8 @@ public enum Executor {
     }
 
     #endif
+    
+    
     """
     
     public static func run(input: String, output: String) throws {
@@ -126,6 +137,9 @@ public enum Executor {
         while let file = enumarator?.nextObject() as? URL {
             if file.pathExtension == "imageset" {
                 try generateImageConstants(input: file)
+            }
+            if file.pathExtension == "symbolset" {
+                try generateSymbolConstants(input: file)
             }
             if file.pathExtension == "colorset" {
                 try generateColorConstants(input: file)
@@ -165,6 +179,18 @@ public enum Executor {
         let contents = try JSONDecoder().decode(Contents.self, from: data)
         
         let hasImages = contents.images.filter({$0.filename != nil}).isEmpty == false
+        
+        if hasImages {
+            let basename = input.deletingPathExtension().lastPathComponent
+            self.images.append(basename)
+        }
+    }
+    
+    static func generateSymbolConstants(input: URL) throws {
+        let contentJSONURL = input.appendingPathComponent("Contents.json")
+        let data = try Data(contentsOf: contentJSONURL)
+        let contents = try JSONDecoder().decode(Symbols.self, from: data)
+        let hasImages = contents.symbols.filter({$0.filename != nil}).isEmpty == false
         
         if hasImages {
             let basename = input.deletingPathExtension().lastPathComponent
