@@ -148,7 +148,7 @@ public enum Executor {
         
         if !images.isEmpty {
             generateCode.append(imageAssetGeneratedCode)
-            generateCode.append("public extension ImageAssetResource {\n")
+            generateCode.append("@MainActor public extension ImageAssetResource {\n")
             
             for image in images {
                 generateCode.append("\t/// The \"\(image)\" asset catalog image resource.\n")
@@ -160,7 +160,7 @@ public enum Executor {
         
         if !colors.isEmpty {
             generateCode.append(colorAssetGeneratedCode)
-            generateCode.append("public extension ColorAssetResource {\n")
+            generateCode.append("@MainActor public extension ColorAssetResource {\n")
             
             for color in colors {
                 generateCode.append("\t/// The \"\(color)\" asset catalog color resource.\n")
