@@ -51,7 +51,7 @@ public enum Executor {
     
     static var imageAssetGeneratedCode: String = """
     // MARK: - Image Assets
-    public struct ImageAssetResource: Hashable {
+    public struct ImageAssetResource: Hashable, Sendable {
         public var name: String
         public var bundle: Bundle
         
@@ -90,7 +90,7 @@ public enum Executor {
     
     static var colorAssetGeneratedCode: String = """
     // MARK: - Color Assets
-    public struct ColorAssetResource: Hashable {
+    public struct ColorAssetResource: Hashable, Sendable {
         public var name: String
         public var bundle: Bundle
         
